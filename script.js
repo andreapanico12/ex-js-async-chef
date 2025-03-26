@@ -5,12 +5,9 @@ async function fetchJason(url){
 }
 
 async function getChefBirthday(id) {
-  const responseRecipe= await fetch(`https://dummyjson.com/recipes/${id}`)
-  const recipe = await responseRecipe.json();
+  const recipe = await fetchJason(`https://dummyjson.com/recipes/${id}`)
   let chefId = recipe.userId;
-  const responseChef = await fetch(`https://dummyjson.com/users/${chefId}`)
-  const chef = await responseChef.json()
-  
+  const chef = await fetchJason(`https://dummyjson.com/users/${chefId}`)
   let birthday = chef.birthDate;
 
   return birthday
