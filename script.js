@@ -1,5 +1,14 @@
+// TEST libreria dayjs
+const oggi = dayjs();
+console.log(oggi.format("DD/MM/YYYY"))
+
+
 async function fetchJason(url){
   const response = await fetch(url);
+  // response.ok è una proprietà dell'oggetto response per verificare che la chiamata sia andata a buon fine o restituisca un errore 400. In questo caso gestisco l'errore manualmente.
+  if (!response.ok) {
+    throw new Error(`Errore HTTP ${response.status} su ${url}`);
+  }
   const object = await response.json();
   return object;
 }
@@ -9,7 +18,6 @@ async function getChefBirthday(id) {
   let recipe
   let chefId
   let chef
-  let birthday
   // NB:try/catch creano uno scope locale
   try{
     recipe = await fetchJason(`https://dummyjson.com/recipes/${id}`)
@@ -17,17 +25,27 @@ async function getChefBirthday(id) {
   } 
   catch(error) {
     throw new Error(`Non posso trovare la ricetta con ID: ${id}`)
-  }
+  } 
   try{
-    chef = await fetchJason(`https://dummyjson.com/users/${chefId}`)
-    birthday = chef.birthDate;
-  }
+      if(!chefId){
+        throw new Error (`Non posso trovare uno chef con ID ${chefId}`)
+      }
+      chef = await fetchJason(`https://dummyjson.com/users/${chefId}`)
+      const birthday = chef.birthDate;
+
+      if (!birthday){
+        throw new Error(`Lo chef con ID ${chefId} non ha una data di nascita valida`)
+      }
+      return birthday
+    }
+    
   catch(error){
-    console.log("Entrato nel secondo catch!")
-    throw new Error(`Non posso trovare lo chef con ID :${chefId}`)
-  }
+      throw error
+    }
+
+  
+
   // posizionare il return all'interno del finally non permetteva al secondo catch di fare il throw dell'errore.
-  return birthday
 
 }
 
