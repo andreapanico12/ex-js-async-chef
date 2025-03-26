@@ -36,12 +36,15 @@ async function getChefBirthday(id) {
       throw error
     }
 
-  
-
   // posizionare il return all'interno del finally non permetteva al secondo catch di fare il throw dell'errore.
 
 }
 
-getChefBirthday(1)
-.then(birthday => console.log("Data di nascita dello chef:", birthday))
-.catch(error => console.error("Errore:", error.message));
+(async () =>{
+ try{
+  const birthday = await getChefBirthday(1)
+  console.log("Data di nascita dello chef:", birthday)
+ } catch(error) {
+  console.error("Errore:", error.message);
+ }
+}) ();
