@@ -7,7 +7,7 @@ async function getChefBirthday(id) {
   const responseChef = await fetch(`https://dummyjson.com/users/${chefId}`)
   const chef = await responseChef.json()
   
-  dataNascitaChef = chef.birthDate;
+  let dataNascitaChef = chef.birthDate;
 
   return dataNascitaChef
 
