@@ -6,8 +6,7 @@ console.log(oggi.format("DD/MM/YYYY"))
 async function getChefBirthday(id) {
 
   let recipe
-  let chefId
-  let chef
+
   // NB:try/catch creano uno scope locale
   try{
     const recipeResponse = await fetch(`https://dummyjson.com/recipes/${id}`)
@@ -15,16 +14,19 @@ async function getChefBirthday(id) {
     chefId = recipe.userId;
   } 
   catch(error){
-    throw new Error(`Non posso trovare la ricetta con ID: ${id}`)
+    throw new Error(`Non posso recuperare la ricetta con ID: ${id}`)
+  }
+  if(!recipe){
+    throw new Error(`Non esiste una ricetta con ID ${id}`);
   } 
+
+  let chefId
+  let chef
+
   try{
-      if(!chefId){
-        throw new Error (`Non posso trovare uno chef con ID ${chefId}`)
-      }
       const chefResponse = await fetch(`https://dummyjson.com/users/${chefId}`)
       chef = await chefResponse.json();
       const birthday = dayjs(chef.birthDate);
-
 
       if (!birthday){
         throw new Error(`Lo chef con ID ${chefId} non ha una data di nascita valida`)
@@ -33,7 +35,7 @@ async function getChefBirthday(id) {
     }
     
   catch(error){
-      throw error
+      throw new Error(`Non posso trovare uno chef con ID ${chefId}`)
     }
 
   // posizionare il return all'interno del finally non permetteva al secondo catch di fare il throw dell'errore.
