@@ -22,21 +22,24 @@ async function getChefBirthday(id) {
 
   let chefId
   let chef
+  let birthday
 
   try{
       const chefResponse = await fetch(`https://dummyjson.com/users/${chefId}`)
       chef = await chefResponse.json();
-      const birthday = dayjs(chef.birthDate);
-
-      if (!birthday){
-        throw new Error(`Lo chef con ID ${chefId} non ha una data di nascita valida`)
-      }
-      return birthday.format("DD/MM/YYYY")
-    }
-    
+      birthday = dayjs(chef.birthDate);
+      
+    }    
   catch(error){
       throw new Error(`Non posso trovare uno chef con ID ${chefId}`)
     }
+  if(!chef){
+    throw new Error(`Non esiste uno chef con ID ${chefId}`)
+  }
+  if(!birthday){
+    throw new Error(`Lo chef con ID ${chefId} non ha una data di nascita valida`)
+  }  
+  return birthday.format("DD/MM/YYYY")
 
   // posizionare il return all'interno del finally non permetteva al secondo catch di fare il throw dell'errore.
 
