@@ -31,12 +31,13 @@ async function getChefBirthday(id) {
         throw new Error (`Non posso trovare uno chef con ID ${chefId}`)
       }
       chef = await fetchJason(`https://dummyjson.com/users/${chefId}`)
-      const birthday = chef.birthDate;
+      const birthday = dayjs(chef.birthDate);
+
 
       if (!birthday){
         throw new Error(`Lo chef con ID ${chefId} non ha una data di nascita valida`)
       }
-      return birthday
+      return birthday.format("DD/MM/YYYY")
     }
     
   catch(error){
