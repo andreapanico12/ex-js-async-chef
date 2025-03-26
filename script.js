@@ -1,4 +1,8 @@
-
+async function fetchJason(url){
+  const response = await fetch(url);
+  const object = await response.json();
+  return object;
+}
 
 async function getChefBirthday(id) {
   const responseRecipe= await fetch(`https://dummyjson.com/recipes/${id}`)
