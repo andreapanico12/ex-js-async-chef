@@ -6,34 +6,37 @@ console.log(oggi.format("DD/MM/YYYY"))
 async function getChefBirthday(id) {
 
   let recipe
+  let chefId
 
   // NB:try/catch creano uno scope locale
   try{
     const recipeResponse = await fetch(`https://dummyjson.com/recipes/${id}`)
     recipe = await recipeResponse.json();
+    console.log(recipe)
     chefId = recipe.userId;
   } 
   catch(error){
     throw new Error(`Non posso recuperare la ricetta con ID: ${id}`)
   }
-  if(!recipe){
+  if(recipe.message){
     throw new Error(`Non esiste una ricetta con ID ${id}`);
   } 
 
-  let chefId
+ 
   let chef
   let birthday
 
   try{
       const chefResponse = await fetch(`https://dummyjson.com/users/${chefId}`)
       chef = await chefResponse.json();
+      console.log(chef)
       birthday = dayjs(chef.birthDate);
       
     }    
   catch(error){
       throw new Error(`Non posso trovare uno chef con ID ${chefId}`)
     }
-  if(!chef){
+  if(chef.message){
     throw new Error(`Non esiste uno chef con ID ${chefId}`)
   }
   if(!birthday){
@@ -47,7 +50,7 @@ async function getChefBirthday(id) {
 
 (async () =>{
  try{
-  const birthday = await getChefBirthday(1)
+  const birthday = await getChefBirthday(100202)
   console.log("Data di nascita dello chef:", birthday)
  } catch(error) {
   console.error("Errore:", error.message);
